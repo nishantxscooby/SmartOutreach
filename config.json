@@ -1,0 +1,12 @@
+{
+  "EMAIL": "your@gmail.com",
+  "APP_PASSWORD": "xxxx xxxx xxxx xxxx",
+  "AUTO": true,
+  "ATTACH_RESUME": false,
+  "RESUME_PATH": "data/resume.pdf",
+  "DAILY_LIMIT": 40,
+  "MIN_DELAY": 35,
+  "MAX_DELAY": 90,
+  "FOLLOWUP_AFTER_DAYS": 4,
+  "IGNORE_FREE_DOMAINS": true
+}
