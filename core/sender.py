@@ -48,7 +48,7 @@ def send_email(config, to_email, subject, body, log_callback=None):
                 with open(resume_path, "rb") as attachment:
                     part = MIMEBase("application", "octet-stream")
                     part.set_payload(attachment.read())
-                encoders.encode_base64(part)
+                    encoders.encode_base64(part)
                 part.add_header(
                     "Content-Disposition",
                     f"attachment; filename={os.path.basename(resume_path)}",
