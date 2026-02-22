@@ -1,6 +1,7 @@
 import email
 import imaplib
 import re
+from datetime import datetime, timedelta
 
 from core import database
 
@@ -35,7 +36,25 @@ def check_replies(config, log_callback=None):
             return 0
 
         _log(f"Checking replies against {len(sent_emails)} sent contacts...")
-        status, message_ids = mail.search(None, "ALL")
+
+        # Calculate SINCE date from earliest sent_time in db, fallback to 30 days ago
+        since_date = None
+        for entry in db.values():
+            sent_time_str = entry.get("sent_time", "")
+            if sent_time_str:
+                try:
+                    dt = datetime.fromisoformat(sent_time_str)
+                    if since_date is None or dt < since_date:
+                        since_date = dt
+                except ValueError:
+                    pass
+
+        if since_date is None:
+            since_date = datetime.now() - timedelta(days=30)
+
+        # Format date for IMAP SINCE filter: "01-Jan-2024"
+        since_str = since_date.strftime("%d-%b-%Y")
+        status, message_ids = mail.search(None, f"(SINCE {since_str})")
 
         if status != "OK" or not message_ids[0]:
             _log("No messages found in inbox.")
